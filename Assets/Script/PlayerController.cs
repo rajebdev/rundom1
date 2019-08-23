@@ -48,15 +48,14 @@ public class PlayerController : MonoBehaviour
     // Time variable
     public Text timeText;
     private float secTime;
-    private float tempSecTime;
-    private bool warningAktif = false;
+    private bool warningAktif;
 
     // Count Screen Controller
     public GameObject countScreen;
     public Text countText;
     public Text readyText;
 
-    private int count = 5;
+    private int count = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +89,7 @@ public class PlayerController : MonoBehaviour
             if (kinect.IsUserDetected() || detected)
             {
                 warningImg.SetActive(false);
+                warningAktif = false;
                 if (PlayerPrefs.GetFloat("xBahuKanan") == 0)
                 {
                     PlayerPrefs.SetFloat("xBahuKanan", getPosX(BahuKanan, 1));
@@ -101,28 +101,19 @@ public class PlayerController : MonoBehaviour
                     countScreen.SetActive(true);
                     countText.text = count.ToString();
                     return;
+
                 }else if (count == 0)
                 {
                     readyText.text = "Go!";
                     countScreen.SetActive(false);
-                    secTime = tempSecTime;
                 }
 
             }
             else
             {
                 warningImg.SetActive(true);
-                if (warningAktif)
-                {
-                    warningAktif = false;
-                }
-                else
-                {
-                    warningAktif = true;
-                }
-
-                secTime = 0;
-                count = 5;
+                warningAktif = true;
+                count = 3;
                 return;
             }
 
@@ -304,15 +295,14 @@ public class PlayerController : MonoBehaviour
             tempRight = true;
         return tempRight;
     }
-
-
-
+    
     private IEnumerator TimeRun()
     {
         while (true)
         {
             yield return new WaitForSeconds(1f);
-            secTime++;
+            if (!warningAktif && count < 0)
+                secTime++;
             count--;
         }
     }
