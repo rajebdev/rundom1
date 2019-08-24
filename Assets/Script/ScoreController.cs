@@ -30,7 +30,12 @@ public class ScoreController : MonoBehaviour
     private int truePoint;
     private int falsePoint;
 
+    // hit Object Controller
 
+    public GameObject GamePlay;
+
+    private List<GameObject> hitObjects = new List<GameObject>();
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -81,25 +86,32 @@ public class ScoreController : MonoBehaviour
         {
             if (hit.gameObject.name.Substring(0, 6) == "Choice")
             {
-                if (hit.gameObject.name.Substring(0, 10) == "Choice (2)")
+                string hitObjectName = hit.gameObject.name;
+                int id = GamePlay.GetComponent<EasyGameplay>().questionId;
+                int answer = GamePlay.GetComponent<EasyGameplay>().answerList[id];
+                if (hit.gameObject.name.Substring(0, 10) == string.Format("Choice ({0})",answer+1))
                 {
-                    score += 1.0f;
+                    score += 10.0f;
                     truePoint++;
                     benarText.GetComponent<Text>().text = truePoint.ToString();
+                    for (int i=0; i < hitObjects.Count; i++)
+                    {
+                        hitObjects[i].SetActive(true);
+                    }
+                    GamePlay.GetComponent<EasyGameplay>().GantiSoal();
+                    GamePlay.GetComponent<EasyGameplay>().timeHit = GetComponent<PlayerController>().secTime;
                 }
                 else
                 {
+                    score -= 2.0f;
                     falsePoint++;
                     salahText.GetComponent<Text>().text = falsePoint.ToString();
+                    GamePlay.GetComponent<EasyGameplay>().choicesImg[int.Parse(hit.gameObject.name.Substring(8, 1)) - 1].gameObject.SetActive(false);
+                    hit.gameObject.SetActive(false);
                 }
 
                 isColl = true;
-                GameObject hitTemp = hit.gameObject;
-                Destroy(hit.gameObject);
-                GameObject newCube = Instantiate(hitTemp) as GameObject;
-                newCube.transform.SetParent(cubeBox);
-                newCube.transform.position = new Vector3(hitTemp.transform.position.x, hitTemp.transform.position.y, cubeBox.position.z);
-                //newCube.gameObject.GetComponent<Renderer>().material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+                hitObjects.Add(hit.gameObject);
             }
         }
     }

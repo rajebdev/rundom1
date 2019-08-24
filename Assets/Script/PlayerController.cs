@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     private int life = 4;
 
-    private CharacterController character;
+    public CharacterController character;
     private Vector3 moveVector;
 
     private bool isDead = false;
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     
     // Time variable
     public Text timeText;
-    private float secTime;
+    public int secTime;
     private bool warningAktif;
 
     // Count Screen Controller
@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
     public Text countText;
     public Text readyText;
 
+    public int coundown = 3;
     private int count = 3;
 
     // Start is called before the first frame update
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
                     PlayerPrefs.SetFloat("xBahuKiri", getPosX(BahuKiri, 1));
                 }
 
-                if (count > -1)
+                if (count > 0)
                 {
                     countScreen.SetActive(true);
                     countText.text = count.ToString();
@@ -104,7 +105,13 @@ public class PlayerController : MonoBehaviour
 
                 }else if (count == 0)
                 {
-                    readyText.text = "Go!";
+                    countScreen.SetActive(true);
+                    readyText.text = "Go!".ToString();
+                    countText.text = count.ToString();
+                    return;
+                }
+                else
+                {
                     countScreen.SetActive(false);
                 }
 
@@ -113,7 +120,7 @@ public class PlayerController : MonoBehaviour
             {
                 warningImg.SetActive(true);
                 warningAktif = true;
-                count = 3;
+                count = coundown;
                 return;
             }
 
@@ -135,19 +142,20 @@ public class PlayerController : MonoBehaviour
         if (Time.time - startTime < animationDuration)
         {
             //character.Move(Vector3.forward * speed * Time.deltaTime);
+            count = coundown;
             return;
         }
 
         // Reset Move Vector
         moveVector = Vector3.zero;
-
-
+        
         // set Gravity
         if (character.isGrounded) verticalVelocity = -0.5f;
         else verticalVelocity -= gravity * Time.deltaTime;
 
         // character Jump
-        if (character.isGrounded)
+        int tempCountJump = GetComponent<ScoreController>().GamePlay.GetComponent<EasyGameplay>().countdownQuestion;
+        if (character.isGrounded && (tempCountJump > 7 || tempCountJump < 4))
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 moveVector.y = jumpHeight * speed;
