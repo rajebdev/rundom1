@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         PlayerPrefs.DeleteKey("xBahuKanan");
         PlayerPrefs.DeleteKey("xBahuKiri");
+
     }
 
     void Update()
@@ -75,17 +76,19 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
             detected = true;
 
+        kinect = KinectManager.Instance;
         try
         {
-            kinect = KinectManager.Instance;
+            kinect.IsUserDetected();
             kinectPower = true;
         }
-        catch
+#pragma warning disable CS0168 // Variable is declared but never used
+        catch (Exception e)
         {
             kinectPower = false;
         }
 
-        if (kinectPower)
+        if (kinectPower || detected)
         {
             if (kinect.IsUserDetected() || detected)
             {
@@ -106,15 +109,14 @@ public class PlayerController : MonoBehaviour
                 }else if (count == 0)
                 {
                     countScreen.SetActive(true);
-                    readyText.text = "Go!".ToString();
-                    countText.text = count.ToString();
+                    readyText.text = "";
+                    countText.text = "Go!".ToString();
                     return;
                 }
                 else
                 {
                     countScreen.SetActive(false);
                 }
-
             }
             else
             {
@@ -142,7 +144,24 @@ public class PlayerController : MonoBehaviour
         if (Time.time - startTime < animationDuration)
         {
             //character.Move(Vector3.forward * speed * Time.deltaTime);
-            count = coundown;
+            if (count > 0)
+            {
+                countScreen.SetActive(true);
+                countText.text = count.ToString();
+                return;
+
+            }
+            else if (count == 0)
+            {
+                countScreen.SetActive(true);
+                readyText.text = "";
+                countText.text = "Go!".ToString();
+                return;
+            }
+            else
+            {
+                countScreen.SetActive(false);
+            }
             return;
         }
 
@@ -154,8 +173,8 @@ public class PlayerController : MonoBehaviour
         else verticalVelocity -= gravity * Time.deltaTime;
 
         // character Jump
-        int tempCountJump = GetComponent<ScoreController>().GamePlay.GetComponent<EasyGameplay>().countdownQuestion;
-        if (character.isGrounded && (tempCountJump > 7 || tempCountJump < 4))
+        int tempCountJump = GetComponent<ScoreController>().GamePlay.GetComponent<Gameplay>().countdownQuestion;
+        if (character.isGrounded && (tempCountJump > 7 || tempCountJump < 4 || secTime != 0))
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 moveVector.y = jumpHeight * speed;

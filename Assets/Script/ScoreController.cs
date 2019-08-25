@@ -31,11 +31,13 @@ public class ScoreController : MonoBehaviour
     private int falsePoint;
 
     // hit Object Controller
-
     public GameObject GamePlay;
-
     private List<GameObject> hitObjects = new List<GameObject>();
-    
+
+    // Notif True False Answer
+    public GameObject trueNotif, falseNotif;
+    public int timeHitFalse;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +59,14 @@ public class ScoreController : MonoBehaviour
         // Disable Score During Animation Camera
         if (Time.time - startTime < animationDuration)
             return;
+        if (GetComponent<PlayerController>().secTime-timeHitFalse > 3)
+        {
+            falseNotif.SetActive(false);
+        }
+        if (GetComponent<PlayerController>().secTime - GamePlay.GetComponent<Gameplay>().timeHit > 3)
+        {
+            trueNotif.SetActive(false);
+        }
 
         if (score >= scoreToNextLevel)
             LevelUp();
@@ -87,8 +97,8 @@ public class ScoreController : MonoBehaviour
             if (hit.gameObject.name.Substring(0, 6) == "Choice")
             {
                 string hitObjectName = hit.gameObject.name;
-                int id = GamePlay.GetComponent<EasyGameplay>().questionId;
-                int answer = GamePlay.GetComponent<EasyGameplay>().answerList[id];
+                int id = GamePlay.GetComponent<Gameplay>().questionId;
+                int answer = GamePlay.GetComponent<Gameplay>().answerList[id];
                 if (hit.gameObject.name.Substring(0, 10) == string.Format("Choice ({0})",answer+1))
                 {
                     score += 10.0f;
@@ -98,16 +108,20 @@ public class ScoreController : MonoBehaviour
                     {
                         hitObjects[i].SetActive(true);
                     }
-                    GamePlay.GetComponent<EasyGameplay>().GantiSoal();
-                    GamePlay.GetComponent<EasyGameplay>().timeHit = GetComponent<PlayerController>().secTime;
+                    GamePlay.GetComponent<Gameplay>().GantiSoal();
+                    GamePlay.GetComponent<Gameplay>().timeHit = GetComponent<PlayerController>().secTime;
+                    Debug.Log(GetComponent<PlayerController>().secTime - GamePlay.GetComponent<Gameplay>().timeHit);
+                    trueNotif.SetActive(true);
                 }
                 else
                 {
                     score -= 2.0f;
                     falsePoint++;
                     salahText.GetComponent<Text>().text = falsePoint.ToString();
-                    GamePlay.GetComponent<EasyGameplay>().choicesImg[int.Parse(hit.gameObject.name.Substring(8, 1)) - 1].gameObject.SetActive(false);
+                    GamePlay.GetComponent<Gameplay>().choicesImg[int.Parse(hit.gameObject.name.Substring(8, 1)) - 1].gameObject.SetActive(false);
                     hit.gameObject.SetActive(false);
+                    timeHitFalse = GetComponent<PlayerController>().secTime;
+                    falseNotif.SetActive(true);
                 }
 
                 isColl = true;
