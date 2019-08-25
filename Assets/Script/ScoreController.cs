@@ -20,7 +20,7 @@ public class ScoreController : MonoBehaviour
     private float startTime;
 
     private int difficultyLevel = 1;
-    private int maxDifficultyLevel = 10;
+    private int maxDifficultyLevel = 3;
     private int scoreToNextLevel = 10;
 
     // Nilai Contoroller
@@ -59,6 +59,11 @@ public class ScoreController : MonoBehaviour
         // Disable Score During Animation Camera
         if (Time.time - startTime < animationDuration)
             return;
+        if ((GetComponent<PlayerController>().secTime - timeHitFalse < 4 || GetComponent<PlayerController>().secTime - GamePlay.GetComponent<Gameplay>().timeHit < 4) && (timeHitFalse != 0 || GamePlay.GetComponent<Gameplay>().timeHit != 0))
+            GamePlay.GetComponent<Gameplay>().questionImg.gameObject.SetActive(false);
+        else
+            GamePlay.GetComponent<Gameplay>().questionImg.gameObject.SetActive(true);
+
         if (GetComponent<PlayerController>().secTime-timeHitFalse > 3)
         {
             falseNotif.SetActive(false);
@@ -110,7 +115,6 @@ public class ScoreController : MonoBehaviour
                     }
                     GamePlay.GetComponent<Gameplay>().GantiSoal();
                     GamePlay.GetComponent<Gameplay>().timeHit = GetComponent<PlayerController>().secTime;
-                    Debug.Log(GetComponent<PlayerController>().secTime - GamePlay.GetComponent<Gameplay>().timeHit);
                     trueNotif.SetActive(true);
                 }
                 else

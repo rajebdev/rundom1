@@ -8,10 +8,10 @@ public class TileManager : MonoBehaviour
     private List<GameObject> activeTile;
 
     private Transform playerTransform;
-    private float spawnZ = 0.0f;
-    private float tileLength = 12.0f;
-    private float safeZone = 15.0f;
-    private int amountTileOnScreen = 10;
+    private float spawnZ = -15.0f;
+    private float tileLength = 1000f;
+    private float safeZone = 1015f;
+    private int amountTileOnScreen = 2;
     private int lastPrefabIndex = 0;
 
     // Start is called before the first frame update

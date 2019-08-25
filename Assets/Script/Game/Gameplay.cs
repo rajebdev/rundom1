@@ -75,10 +75,12 @@ public class Gameplay : MonoBehaviour
     void Update()
     {
 
+        // Mengacak jawaban
+        questionImg.GetComponent<Image>().sprite = shapes[GetShapeNum()];
         containerCountdownSoal.gameObject.SetActive(false);
         if (timeHit != 0)
             countdownQuestion = player.GetComponent<PlayerController>().secTime - timeHit;
-
+        
         if (questionId < 4)
         {
             if (countdownQuestion > jarakSetiapSoal - 3 && countdownQuestion < jarakSetiapSoal + 1)
@@ -88,8 +90,6 @@ public class Gameplay : MonoBehaviour
                 return;
             }
 
-            // Mengacak jawaban
-            questionImg.GetComponent<Image>().sprite = shapes[GetShapeNum()];
         }
         else
         {
