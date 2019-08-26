@@ -51,9 +51,11 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < nama.Length; i++)
         {
             GameObject tempPlayer = Instantiate(detailPlayer) as GameObject;
-            tempPlayer.transform.position = new Vector3(detailPlayer.transform.position.x, detailPlayer.transform.position.y - 35 * i, detailPlayer.transform.position.z);
+            tempPlayer.transform.position = new Vector3(0, -5 - 35 * i, 0);
             tempPlayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = nama[i];
             tempPlayer.transform.SetParent(contentView.transform, false);
+            tempPlayer.name = i.ToString() + " DetailPlayer";
+            tempPlayer.SetActive(true);
         }
     }
 
