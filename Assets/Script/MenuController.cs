@@ -21,6 +21,10 @@ public class MenuController : MonoBehaviour
     public GameObject femaleCek;
     public GameObject addPlayerContainer;
 
+    public GameObject listContainer;
+    public GameObject detailPlayer;
+    public GameObject contentView;
+
     private string[] nama = {
         "Wijanarko",
         "Putra",
@@ -43,15 +47,14 @@ public class MenuController : MonoBehaviour
         quitImg.gameObject.SetActive(false);
         settImg.gameObject.SetActive(false);
         PlayerPrefs.DeleteKey("nama");
-        //for (int i=0; i < nama.Length; i++)
-        //{
-        //    GameObject tempPlayer = Instantiate(detailPlayerBox) as GameObject;
-        //    tempPlayer.transform.position = new Vector3(detailPlayerBox.transform.position.x, detailPlayerBox.transform.position.y-30*i, detailPlayerBox.transform.position.z);
-        //    tempPlayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = nama[i];
-        //    //tempPlayer.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-        //    tempPlayer.transform.SetParent(contentView);
-        //    tempPlayer.SetActive(true);
-        //}
+        contentView.GetComponent<RectTransform>().sizeDelta = new Vector2(contentView.GetComponent<RectTransform>().sizeDelta.x, nama.Length*35 + 10);
+        for (int i = 0; i < nama.Length; i++)
+        {
+            GameObject tempPlayer = Instantiate(detailPlayer) as GameObject;
+            tempPlayer.transform.position = new Vector3(detailPlayer.transform.position.x, detailPlayer.transform.position.y - 35 * i, detailPlayer.transform.position.z);
+            tempPlayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = nama[i];
+            tempPlayer.transform.SetParent(contentView.transform, false);
+        }
     }
 
     // Update is called once per frame
@@ -90,13 +93,13 @@ public class MenuController : MonoBehaviour
 
     public void ToAddPlayer()
     {
-        listPlayerContainer.SetActive(false);
+        listContainer.SetActive(false);
         addPlayerContainer.SetActive(true);
     }
 
     public void ToCancelAddPlayer()
     {
-        listPlayerContainer.SetActive(true);
+        listContainer.SetActive(true);
         addPlayerContainer.SetActive(false);
     }
 

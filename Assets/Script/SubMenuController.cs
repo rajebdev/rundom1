@@ -11,9 +11,9 @@ public class SubMenuController : MonoBehaviour
     void Start()
     {
         if  (PlayerPrefs.GetString("nama") != "")
-            yourName.text = PlayerPrefs.GetString("nama");
+            yourName.text = "HI, "+PlayerPrefs.GetString("nama");
         else
-            yourName.text = "Your Name";
+            yourName.text = "HI, Your Name";
 
     }
 
