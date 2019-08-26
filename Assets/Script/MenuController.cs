@@ -10,14 +10,17 @@ public class MenuController : MonoBehaviour
     public Image quitImg;
     public Image settImg;
 
-    //public Image mouseImg;
-
     private bool isQuitShowned = false;
     private bool isSettShowned = false;
+    private bool isInputShowned = false;
 
     private float transition;
 
-    //private int i;
+    public GameObject inputContainer;
+    public InputField nameText;
+    public GameObject maleCek;
+    public GameObject femaleCek;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -29,18 +32,7 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //// Controller cursor with mouse
-        //mouseImg.gameObject.transform.position = Input.mousePosition;
-        //// Detection button selected
-        //while (i < buttons.Length)
-        //{
-        //    if (mouseImg.gameObject.transform.position.x == buttons[i].position.x)
-        //    {
-        //        Debug.Log("Collide Mouse With "+buttons[i]);
-        //    }
-        //    i++;
-        //}
-        //i = 0;
+        
         if (isQuitShowned)
         {
             transition += Time.deltaTime * 2;
@@ -51,11 +43,50 @@ public class MenuController : MonoBehaviour
             transition += Time.deltaTime * 2;
             settImg.color = Color.Lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0.5f), transition);
         }
+        if (isInputShowned)
+        {
+            transition += Time.deltaTime * 2;
+            inputContainer.GetComponent<Image>().color = Color.Lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0.5f), transition);
+        }
     }
 
-    public void ToGame()
+    public void ToSubmit()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("SubMenuGame");
+    }
+
+    public void ToPlay()
+    {
+        inputContainer.SetActive(true);
+        isInputShowned = true;
+        transition = 0.0f;
+    }
+
+    public void OnCancelInput()
+    {
+        inputContainer.SetActive(false);
+        isInputShowned = false;
+        transition = 0.0f;
+        maleCek.SetActive(false);
+        femaleCek.SetActive(false);
+    }
+
+    public void ToClearText()
+    {
+        nameText.Select();
+        nameText.text = "";
+    }
+
+    public void ToMale()
+    {
+        maleCek.SetActive(true);
+        femaleCek.SetActive(false);
+    }
+
+    public void ToFemale()
+    {
+        femaleCek.SetActive(true);
+        maleCek.SetActive(false);
     }
 
     public void OnClickQuit()

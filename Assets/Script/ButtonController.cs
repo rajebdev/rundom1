@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -26,27 +26,7 @@ public class ButtonController : MonoBehaviour
     {
         SceneManager.LoadScene("SubMenuGame");
     }
-
-    public void ToMenuAddGame()
-    {
-        SceneManager.LoadScene("MenuAddGame");
-    }
-
-    public void ToMenuSubstractGame()
-    {
-        SceneManager.LoadScene("MenuSubstractGame");
-    }
-
-    public void ToMenuKaliGame()
-    {
-        SceneManager.LoadScene("MenuKaliGame");
-    }
-
-    public void ToMenuBagiGame()
-    {
-        SceneManager.LoadScene("MenuBagiGame");
-    }
-
+    
     public void ToEasyGame()
     {
         SceneManager.LoadScene("EasyGame");
