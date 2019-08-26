@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    public Transform[] buttons;
     public Image quitImg;
     public Image settImg;
 
@@ -20,13 +19,39 @@ public class MenuController : MonoBehaviour
     public InputField nameText;
     public GameObject maleCek;
     public GameObject femaleCek;
-    
+    public GameObject addPlayerContainer;
+
+    private string[] nama = {
+        "Wijanarko",
+        "Putra",
+        "rajeb",
+        "hilal",
+        "hendrik",
+        "rohman",
+        "W",
+        "P",
+        "r",
+        "h",
+        "h",
+        "r"
+    };
+
 
     // Start is called before the first frame update
     void Start()
     {
         quitImg.gameObject.SetActive(false);
         settImg.gameObject.SetActive(false);
+        PlayerPrefs.DeleteKey("nama");
+        //for (int i=0; i < nama.Length; i++)
+        //{
+        //    GameObject tempPlayer = Instantiate(detailPlayerBox) as GameObject;
+        //    tempPlayer.transform.position = new Vector3(detailPlayerBox.transform.position.x, detailPlayerBox.transform.position.y-30*i, detailPlayerBox.transform.position.z);
+        //    tempPlayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = nama[i];
+        //    //tempPlayer.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        //    tempPlayer.transform.SetParent(contentView);
+        //    tempPlayer.SetActive(true);
+        //}
     }
 
     // Update is called once per frame
@@ -52,6 +77,7 @@ public class MenuController : MonoBehaviour
 
     public void ToSubmit()
     {
+        PlayerPrefs.SetString("nama", nameText.text);
         SceneManager.LoadScene("SubMenuGame");
     }
 
@@ -62,7 +88,19 @@ public class MenuController : MonoBehaviour
         transition = 0.0f;
     }
 
-    public void OnCancelInput()
+    public void ToAddPlayer()
+    {
+        listPlayerContainer.SetActive(false);
+        addPlayerContainer.SetActive(true);
+    }
+
+    public void ToCancelAddPlayer()
+    {
+        listPlayerContainer.SetActive(true);
+        addPlayerContainer.SetActive(false);
+    }
+
+    public void OnCancelPlay()
     {
         inputContainer.SetActive(false);
         isInputShowned = false;
