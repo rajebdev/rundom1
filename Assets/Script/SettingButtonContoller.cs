@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class SettingButtonContoller : MonoBehaviour
 {
+    // Sound Effect Object
+    public GameObject buttonSoundEffect;
+
     public GameObject musicTick;
     public GameObject bgmTick;
     public Text musicOnText;
@@ -13,7 +16,6 @@ public class SettingButtonContoller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        musicTick.gameObject.SetActive(true);
         if (PlayerPrefs.GetString("BGM") == "ON" || PlayerPrefs.GetString("BGM") == "")
         {
             bgmTick.gameObject.SetActive(true);
@@ -23,6 +25,16 @@ public class SettingButtonContoller : MonoBehaviour
         {
             bgmTick.gameObject.SetActive(false);
             bgmOnText.text = "OFF";
+        }
+        if (PlayerPrefs.GetString("SOUND") == "ON" || PlayerPrefs.GetString("SOUND") == "")
+        {
+            musicTick.gameObject.SetActive(true);
+            musicOnText.text = "ON";
+        }
+        else
+        {
+            musicTick.gameObject.SetActive(false);
+            musicOnText.text = "OFF";
         }
     }
 
@@ -34,20 +46,24 @@ public class SettingButtonContoller : MonoBehaviour
 
     public void OnMusicClick()
     {
+        ButtonClick();
         if (musicOnText.text == "ON")
         {
             musicTick.gameObject.SetActive(false);
+            PlayerPrefs.SetString("SOUND", "OFF");
             musicOnText.text = "OFF";
         }
         else
         {
             musicTick.gameObject.SetActive(true);
+            PlayerPrefs.SetString("SOUND", "ON");
             musicOnText.text = "ON";
         }
     }
 
     public void OnBGMClick()
     {
+        ButtonClick();
         // Playing background menu music
         GameObject soundObject = GameObject.Find("BackgroundSoundMenu");
         AudioSource audioSource = soundObject.GetComponent<AudioSource>();
@@ -65,6 +81,16 @@ public class SettingButtonContoller : MonoBehaviour
             PlayerPrefs.SetString("BGM", "ON");
             bgmOnText.text = "ON";
             audioSource.Play();
+        }
+    }
+
+
+    private void ButtonClick()
+    {
+        if (PlayerPrefs.GetString("SOUND") == "ON" || PlayerPrefs.GetString("SOUND") == "")
+        {
+            PlayerPrefs.SetString("SOUND", "ON");
+            buttonSoundEffect.GetComponent<AudioSource>().Play();
         }
     }
 }

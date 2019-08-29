@@ -66,7 +66,6 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         PlayerPrefs.DeleteKey("xBahuKanan");
         PlayerPrefs.DeleteKey("xBahuKiri");
-
     }
 
     void Update()
@@ -88,7 +87,7 @@ public class PlayerController : MonoBehaviour
             kinectPower = false;
         }
 
-        if (kinectPower || detected)
+        if (kinectPower)
         {
             if (kinect.IsUserDetected() || detected)
             {
@@ -144,25 +143,27 @@ public class PlayerController : MonoBehaviour
         if (Time.time - startTime < animationDuration)
         {
             //character.Move(Vector3.forward * speed * Time.deltaTime);
-            if (count > 0)
-            {
-                countScreen.SetActive(true);
-                countText.text = count.ToString();
-                return;
-
-            }
-            else if (count == 0)
-            {
-                countScreen.SetActive(true);
-                readyText.text = "";
-                countText.text = "Go!".ToString();
-                return;
-            }
-            else
-            {
-                countScreen.SetActive(false);
-            }
+            count = coundown;
             return;
+        }
+
+        if (count > 0)
+        {
+            countScreen.SetActive(true);
+            countText.text = count.ToString();
+            return;
+
+        }
+        else if (count == 0)
+        {
+            countScreen.SetActive(true);
+            readyText.text = "";
+            countText.text = "Go!".ToString();
+            return;
+        }
+        else
+        {
+            countScreen.SetActive(false);
         }
 
         // Reset Move Vector
@@ -174,7 +175,7 @@ public class PlayerController : MonoBehaviour
 
         // character Jump
         int tempCountJump = GetComponent<ScoreController>().GamePlay.GetComponent<Gameplay>().countdownQuestion;
-        if (character.isGrounded && (tempCountJump > 7 || tempCountJump < 4 || secTime != 0))
+        if (character.isGrounded && (tempCountJump > 7 || tempCountJump < 4) && secTime > 1)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
                 moveVector.y = jumpHeight * speed;

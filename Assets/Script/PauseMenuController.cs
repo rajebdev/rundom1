@@ -18,6 +18,9 @@ public class PauseMenuController : MonoBehaviour
 
     private float tempSpeed;
 
+    // Sound Effect Object
+    public GameObject buttonSoundEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +51,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void TogglePauseMenu()
     {
+        ButtonClick();
         tempSpeed = player.GetComponent<PlayerController>().GetSpeed();
         player.GetComponent<PlayerController>().SetSpeed(-7.0f);
         gameObject.SetActive(true);
@@ -57,6 +61,7 @@ public class PauseMenuController : MonoBehaviour
     // Play Buttons
     public void ToClosePausemenu()
     {
+        ButtonClick();
         player.GetComponent<PlayerController>().SetSpeed(-7.0f+tempSpeed);
         gameObject.SetActive(false);
         Time.timeScale = 1;
@@ -64,10 +69,11 @@ public class PauseMenuController : MonoBehaviour
 
     public void ToMenu()
     {
+        ButtonClick();
         SceneManager.LoadScene("Menu");
         // Playing background menu music
         GameObject soundObject = GameObject.Find("BackgroundSoundMenu");
-        if (soundObject != null)
+        if (soundObject != null && PlayerPrefs.GetString("BGM") == "ON")
         {
             AudioSource audioSource = soundObject.GetComponent<AudioSource>();
             audioSource.Play();
@@ -76,13 +82,16 @@ public class PauseMenuController : MonoBehaviour
 
     public void OnMusicClick()
     {
+        ButtonClick();
         if (musicOnText.text == "ON")
         {
+            PlayerPrefs.SetString("SOUND", "OFF");
             musicTick.gameObject.SetActive(false);
             musicOnText.text = "OFF";
         }
         else
         {
+            PlayerPrefs.SetString("SOUND", "ON");
             musicTick.gameObject.SetActive(true);
             musicOnText.text = "ON";
         }
@@ -90,6 +99,7 @@ public class PauseMenuController : MonoBehaviour
 
     public void OnBGMClick()
     {
+        ButtonClick();
         // Playing background menu music
         GameObject soundObject = GameObject.Find("BackgroundMusicPlay");
         AudioSource audioSource = soundObject.GetComponent<AudioSource>();
@@ -107,6 +117,15 @@ public class PauseMenuController : MonoBehaviour
             PlayerPrefs.SetString("BGM", "ON");
             bgmOnText.text = "ON";
             audioSource.Play();
+        }
+    }
+
+    private void ButtonClick()
+    {
+        if (PlayerPrefs.GetString("SOUND") == "ON" || PlayerPrefs.GetString("SOUND") == "")
+        {
+            PlayerPrefs.SetString("SOUND", "ON");
+            buttonSoundEffect.GetComponent<AudioSource>().Play();
         }
     }
 }

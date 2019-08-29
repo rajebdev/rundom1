@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class ButtonController : MonoBehaviour
 {
 
+    // Sound Effect Object
+    public GameObject buttonSoundEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,27 +22,44 @@ public class ButtonController : MonoBehaviour
 
     public void ToMenu()
     {
+        ButtonClick();
         SceneManager.LoadScene("Menu");
     }
 
     public void ToSubMenu()
     {
+        ButtonClick();
         SceneManager.LoadScene("SubMenuGame");
     }
     
     public void ToEasyGame()
     {
+        ButtonClick();
+        PlayerPrefs.SetString("gametype", "EASY");
         SceneManager.LoadScene("EasyGame");
     }
 
-    public void ToMiddleGame()
+    public void ToMediumGame()
     {
-        SceneManager.LoadScene("MiddleGame");
+        ButtonClick();
+        PlayerPrefs.SetString("gametype", "MEDIUM");
+        SceneManager.LoadScene("MediumGame");
     }
 
     public void ToHardGame()
     {
+        ButtonClick();
+        PlayerPrefs.SetString("gametype", "HARD");
         SceneManager.LoadScene("HardGame");
+    }
+
+    private void ButtonClick()
+    {
+        if (PlayerPrefs.GetString("SOUND") == "ON" || PlayerPrefs.GetString("SOUND") == "")
+        {
+            PlayerPrefs.SetString("SOUND", "ON");
+            buttonSoundEffect.GetComponent<AudioSource>().Play();
+        }
     }
 
 

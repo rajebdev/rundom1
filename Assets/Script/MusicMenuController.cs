@@ -11,6 +11,7 @@ public class MusicMenuController : MonoBehaviour
     {
         if (PlayerPrefs.GetString("BGM") == "ON" || PlayerPrefs.GetString("BGM") == "")
         {
+            PlayerPrefs.SetString("BGM", "ON");
             gameObject.GetComponent<AudioSource>().Play();
         }
     }
