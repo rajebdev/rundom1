@@ -36,21 +36,21 @@ public class ButtonController : MonoBehaviour
     {
         ButtonClick();
         PlayerPrefs.SetString("gametype", "EASY");
-        SceneManager.LoadScene("EasyGame");
+        SceneManager.LoadScene("Game");
     }
 
     public void ToMediumGame()
     {
         ButtonClick();
         PlayerPrefs.SetString("gametype", "MEDIUM");
-        SceneManager.LoadScene("MediumGame");
+        SceneManager.LoadScene("Game");
     }
 
     public void ToHardGame()
     {
         ButtonClick();
         PlayerPrefs.SetString("gametype", "HARD");
-        SceneManager.LoadScene("HardGame");
+        SceneManager.LoadScene("Game");
     }
 
     private void ButtonClick()
