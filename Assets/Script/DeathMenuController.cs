@@ -72,7 +72,7 @@ public class DeathMenuController : MonoBehaviour
 
     private void SaveScoreToDatabase()
     {
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db";
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open();

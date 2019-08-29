@@ -78,6 +78,7 @@ public class PauseMenuController : MonoBehaviour
             AudioSource audioSource = soundObject.GetComponent<AudioSource>();
             audioSource.Play();
         }
+        Time.timeScale = 1;
     }
 
     public void OnMusicClick()

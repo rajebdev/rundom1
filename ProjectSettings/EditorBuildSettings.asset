@@ -12,9 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/SubMenuGame.unity
     guid: b2cb5084d8136a64eaa7e9657a02c208
   - enabled: 1
-    path: Assets/Scenes/EasyGame.unity
+    path: Assets/Scenes/Game.unity
     guid: 1c2dc85d4668d1d41ad12b9a92e44e20
-  - enabled: 1
-    path: Assets/Scenes/MediumGame.unity
-    guid: 50313729da1ea8146b165f163c91840e
   m_configObjects: {}

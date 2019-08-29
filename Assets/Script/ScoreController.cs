@@ -9,6 +9,8 @@ public class ScoreController : MonoBehaviour
 {
     private float score = 0.0f;
 
+    private int scoreHit;
+
     private CharacterController user;
 
     public DeathMenuController deathMenu;
@@ -129,9 +131,15 @@ public class ScoreController : MonoBehaviour
                 if (hit.gameObject.name.Substring(0, 10) == string.Format("Choice ({0})",answer+1))
                 {
                     if (PlayerPrefs.GetString("gametype") == "EASY")
+                    {
+                        scoreHit = 10;
                         score += 10.0f;
+                    }
                     else
-                        score += 20f;
+                    {
+                        scoreHit = 20;
+                        score += 20.0f;
+                    }
                     truePoint++;
                     benarText.GetComponent<Text>().text = truePoint.ToString();
                     for (int i=0; i < hitObjects.Count; i++)
@@ -147,6 +155,7 @@ public class ScoreController : MonoBehaviour
                 }
                 else
                 {
+                    scoreHit = -2;
                     score -= 2.0f;
                     falsePoint++;
                     salahText.GetComponent<Text>().text = falsePoint.ToString();
@@ -197,7 +206,7 @@ public class ScoreController : MonoBehaviour
                 }
 
 
-                SaveHitRecordToDatabase(id, int.Parse(hit.gameObject.name.Substring(8, 1)) - 1, answerCek, answerCek ? 10 : -2, shapeAns, colorAns);
+                SaveHitRecordToDatabase(id, int.Parse(hit.gameObject.name.Substring(8, 1)) - 1, answerCek, scoreHit, shapeAns, colorAns, GetComponent<PlayerController>().secTime);
 
                 isColl = true;
                 hitObjects.Add(hit.gameObject);
@@ -225,15 +234,15 @@ public class ScoreController : MonoBehaviour
         return timeClear;
     }
 
-    private void SaveHitRecordToDatabase(int qId, int answerHit, bool cond, int score, int shapeAns, string colorAns)
+    private void SaveHitRecordToDatabase(int qId, int answerHit, bool cond, int score, int shapeAns, string colorAns, int timeH)
     {
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db";
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open();
         IDbCommand dbcmd = dbconn.CreateCommand();
 
-        string sqlQuery = string.Format("INSERT INTO GameRecordHit VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, '{6}')", PlayerPrefs.GetString("idGameRecord"), qId, answerHit, cond, score, shapeAns, colorAns);
+        string sqlQuery = string.Format("INSERT INTO GameRecordHit VALUES ('{0}', {1}, {2}, {3}, {4}, {5}, '{6}', {7})", PlayerPrefs.GetString("idGameRecord"), qId, answerHit, cond, score, shapeAns, colorAns, timeH);
 
         dbcmd.CommandText = sqlQuery;
         dbcmd.ExecuteNonQuery();
@@ -245,7 +254,7 @@ public class ScoreController : MonoBehaviour
     }
     private void SaveTimeSolvedQuestion(int qId)
     {
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db";
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open();

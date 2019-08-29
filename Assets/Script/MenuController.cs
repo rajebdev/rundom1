@@ -9,6 +9,7 @@ using System.Data;
 
 public class MenuController : MonoBehaviour
 {
+    
     public Image quitImg;
     public Image settImg;
     public Image helpImg;
@@ -133,7 +134,8 @@ public class MenuController : MonoBehaviour
             if (child.gameObject.name != "ListDetailContainer")
                 GameObject.Destroy(child.gameObject);
         }
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -171,7 +173,7 @@ public class MenuController : MonoBehaviour
     private int AddPlayerDatabase(string name, string gender)
     {
         int id = 0;
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db";
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open();
@@ -196,7 +198,7 @@ public class MenuController : MonoBehaviour
     private void OnClickDeletePlayer(int id)
     {
         ButtonClick();
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -250,7 +252,7 @@ public class MenuController : MonoBehaviour
             if (child.gameObject.name != "ListDetailContainer")
                 GameObject.Destroy(child.gameObject);
         }
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -299,7 +301,7 @@ public class MenuController : MonoBehaviour
         ButtonClick();
         detailBoard.SetActive(true);
         leaderBoardList.SetActive(false);
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -388,7 +390,7 @@ public class MenuController : MonoBehaviour
         }
         infoDetail.SetActive(true);
         detailBoard.SetActive(false);
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -409,12 +411,14 @@ public class MenuController : MonoBehaviour
             int poin = reader2.GetInt32(4);
             int shapeAnswer = reader2.GetInt32(5);
             string colorAnswer = reader2.GetString(6);
+            int timeHit = reader2.GetInt32(7);
             GameObject tempRecord = Instantiate(InfoDetailRecordPref) as GameObject;
             tempRecord.transform.position = new Vector3(0, -5 - 35 * j, 0);
             tempRecord.transform.GetChild(0).gameObject.GetComponent<Text>().text = (j+1).ToString();
             tempRecord.transform.GetChild(2).gameObject.GetComponent<Text>().text = colorAnswer+" "+namaBangun[shapeAnswer];
             tempRecord.transform.GetChild(3).gameObject.GetComponent<Text>().text = kondisi ? "BENAR" : "SALAH";
             tempRecord.transform.GetChild(4).gameObject.GetComponent<Text>().text = poin.ToString();
+            tempRecord.transform.GetChild(5).gameObject.GetComponent<Text>().text = string.Format("{0:00}:{1:00}",(int)(timeHit/60),(int)(timeHit%60));
             tempRecord.transform.SetParent(contentInfoDetil.transform, false);
             tempRecord.name = j.ToString() + " InfoDetailRecord";
             tempRecord.SetActive(true);
@@ -476,7 +480,7 @@ public class MenuController : MonoBehaviour
     private void OnClickDeleteRecord(string idRecord, int idp)
     {
         ButtonClick();
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
