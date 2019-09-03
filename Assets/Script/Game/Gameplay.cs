@@ -20,7 +20,7 @@ public class Gameplay : MonoBehaviour
 
     public int questionId;
 
-    private int banyakSoal = 5;
+    private int banyakSoal = 3;
 
     public int[] quesList, answerList, shapeChoice1List, shapeChoice2List, quesColor, shape1ColorList, shape2ColorList;
 
@@ -166,43 +166,25 @@ public class Gameplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        containerCountdownSoal.gameObject.SetActive(false);
-        if (player.GetComponent<ScoreController>().GetQuestionSolved() == 5)
-        {
-            gameEndText.GetComponent<Text>().text = "GAME BERAKHIR DALAM";
-        }
 
-        // Mengacak jawaban
-        int tempRand = GetShapeNum();
-        int tempColor = GetRandColor();
-        questionImg.GetComponent<Image>().sprite = shapes[tempRand];
-        questionImg.GetComponent<Image>().color = colorValues[tempColor];
-        namaBangunText.text = colors[tempColor] + " " + namaBangun[tempRand];
-        containerCountdownSoal.gameObject.SetActive(false);
         if (timeHit != 0)
             countdownQuestion = player.GetComponent<PlayerController>().secTime - timeHit;
-        
-        if (questionId < 4)
+
+        containerCountdownSoal.gameObject.SetActive(false);
+
+
+        if (questionId < banyakSoal - 1)
         {
             if (countdownQuestion > jarakSetiapSoal - 3 && countdownQuestion < jarakSetiapSoal + 1)
             {
                 containerCountdownSoal.gameObject.SetActive(true);
+                questionImg.gameObject.SetActive(false);
                 countdownText.text = (jarakSetiapSoal + 1 - countdownQuestion).ToString();
                 return;
             }
 
         }
-        else
-        {
-            containerCountdownSoal.gameObject.SetActive(false);
-        }
 
-
-        if (questionId == 5)
-        {
-            player.GetComponent<ScoreController>().OnDeath();
-            return;
-        }
 
         if (changeQuestion)
         {
@@ -223,17 +205,35 @@ public class Gameplay : MonoBehaviour
                     choicesImg[i].gameObject.SetActive(false);
                     choicesBox[i].gameObject.SetActive(false);
                 }
+
+                questionImg.gameObject.SetActive(false);
                 return;
             }
         }
-
-        if (questionId < 5)
+        
+        if (questionId == banyakSoal)
         {
+            for (int i = 0; i < 3; i++)
+            {
+                choicesImg[i].gameObject.SetActive(false);
+                choicesBox[i].gameObject.SetActive(false);
+            }
+            player.GetComponent<ScoreController>().OnDeath();
+            return;
+        }
+
+
+        if (questionId < banyakSoal && player.GetComponent<ScoreController>().GetQuestionSolved() != banyakSoal)
+        {
+            questionImg.gameObject.SetActive(true);
             questionImg.GetComponent<Image>().sprite = shapes[quesList[questionId]];
             questionImg.GetComponent<Image>().color = colorValues[quesColor[questionId]];
             choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().sprite = shapes[quesList[questionId]];
             choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().color = colorValues[quesColor[questionId]];
-            namaBangunText.text = colors[quesColor[questionId]]+" "+namaBangun[quesList[questionId]];
+            if (PlayerPrefs.GetString("gametype") == "MEDIUM")
+                namaBangunText.text = colors[quesColor[questionId]] + " " + namaBangun[quesList[questionId]];
+            else
+                namaBangunText.text = "";
 
             if (answerList[questionId] == 0)
             {
@@ -262,7 +262,7 @@ public class Gameplay : MonoBehaviour
 
     private void StartGameDatabase()
     {
-        string conn = "URI=file:" + Application.dataPath + "/Assets_Store/Database/rundomdb.db";
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/rundomdb.db";
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open();
@@ -270,7 +270,7 @@ public class Gameplay : MonoBehaviour
         DateTime dateNow = DateTime.Now;
         string idRecord = dateNow.Year.ToString() + dateNow.Month.ToString() + dateNow.Day.ToString() + dateNow.Hour.ToString() + dateNow.Minute.ToString() + dateNow.Second.ToString();
         PlayerPrefs.SetString("idGameRecord", idRecord);
-        string sqlQuery = string.Format("INSERT INTO GameRecord VALUES ({12}, '{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, '{13}', '{14}', '{15}', '{16}', '{17}')", idRecord, PlayerPrefs.GetString("gametype"), quesList[0], quesList[1], quesList[2], quesList[3], quesList[4], answerList[0], answerList[1], answerList[2], answerList[3], answerList[4], PlayerPrefs.GetInt("id"), colors[quesColor[0]], colors[quesColor[1]], colors[quesColor[2]], colors[quesColor[3]], colors[quesColor[4]]);
+        string sqlQuery = string.Format("INSERT INTO GameRecord VALUES ({12}, '{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, '{13}', '{14}', '{15}', '{16}', '{17}')", idRecord, PlayerPrefs.GetString("gametype"), quesList[0], quesList[1], quesList[2], 0, 0, answerList[0], answerList[1], answerList[2], 0, 0, PlayerPrefs.GetInt("id"), colors[quesColor[0]], colors[quesColor[1]], colors[quesColor[2]], '0', '0');
 
         dbcmd.CommandText = sqlQuery;
         dbcmd.ExecuteNonQuery();
@@ -303,6 +303,11 @@ public class Gameplay : MonoBehaviour
     public void GantiSoal()
     {
         changeQuestion = true;
+    }
+
+    public int GetBanyakSoal()
+    {
+        return banyakSoal;
     }
 
 }

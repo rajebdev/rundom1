@@ -273,8 +273,12 @@ public class MenuController : MonoBehaviour
             tempPlayer.transform.position = new Vector3(0, -5 - 35 * i, 0);
             tempPlayer.transform.GetChild(0).gameObject.GetComponent<Text>().text = (i+1).ToString();
             tempPlayer.transform.GetChild(1).gameObject.GetComponent<Text>().text = name;
-            tempPlayer.transform.GetChild(2).gameObject.GetComponent<Text>().text = score.ToString();
-            tempPlayer.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate { OnClickDetail(id); });
+            if (gender.ToString() == "L")
+                tempPlayer.transform.GetChild(2).gameObject.SetActive(true);
+            else
+                tempPlayer.transform.GetChild(3).gameObject.SetActive(true);
+            tempPlayer.transform.GetChild(4).gameObject.GetComponent<Text>().text = score.ToString();
+            tempPlayer.transform.GetChild(5).GetComponent<Button>().onClick.AddListener(delegate { OnClickDetail(id); });
             tempPlayer.transform.SetParent(contentLeader.transform, false);
             tempPlayer.name = i.ToString() + " DetailLeader";
             tempPlayer.SetActive(true);
@@ -643,6 +647,7 @@ public class MenuController : MonoBehaviour
     public void OnClickQuitYes()
     {
         ButtonClick();
+        KinectManager.Instance.OnApplicationQuit();
         Application.Quit();
     }
 

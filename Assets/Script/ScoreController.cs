@@ -82,11 +82,11 @@ public class ScoreController : MonoBehaviour
             GamePlay.GetComponent<Gameplay>().namaBangunText.gameObject.SetActive(false);
             GamePlay.GetComponent<Gameplay>().questionImg.gameObject.SetActive(false);
         }
-        else
-        {
-            GamePlay.GetComponent<Gameplay>().namaBangunText.gameObject.SetActive(true);
-            GamePlay.GetComponent<Gameplay>().questionImg.gameObject.SetActive(true);
-        }
+        //else
+        //{
+        //    GamePlay.GetComponent<Gameplay>().namaBangunText.gameObject.SetActive(true);
+        //    GamePlay.GetComponent<Gameplay>().questionImg.gameObject.SetActive(true);
+        //}
 
         if (GetComponent<PlayerController>().secTime-timeHitFalse > 3)
         {
@@ -166,7 +166,7 @@ public class ScoreController : MonoBehaviour
                     answerCek = false;
                 }
                 
-                if (id == 4)
+                if (id == GamePlay.GetComponent<Gameplay>().GetBanyakSoal()-1)
                 {
                     timeClear = GetComponent<PlayerController>().secTime;
                 }
