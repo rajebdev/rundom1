@@ -8,8 +8,7 @@ using System;
 using System.Data;
 
 public class MenuController : MonoBehaviour
-{
-    
+{    
     public Image quitImg;
     public Image settImg;
     public Image helpImg;
@@ -52,6 +51,10 @@ public class MenuController : MonoBehaviour
     public GameObject InfoDetailRecordPref;
     public GameObject contentInfoDetil;
 
+    // guide music
+
+    private GuideMusicController guideMusic;
+
     private string[] namaBangun =
     {
         "CIRCLE",
@@ -73,10 +76,15 @@ public class MenuController : MonoBehaviour
     //help Video
     public VideoStreamController videoPlayer;
 
+    public SimplePDF simplepdf;
+
+    public GrafikController grafikControl;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
         quitImg.gameObject.SetActive(false);
         settImg.gameObject.SetActive(false);
         PlayerPrefs.DeleteKey("id");
@@ -125,6 +133,7 @@ public class MenuController : MonoBehaviour
         PlayerPrefs.SetString("nama", namePlayer);
         PlayerPrefs.SetString("gender", gender);
         SceneManager.LoadScene("SubMenuGame");
+        guideMusic.playGuideMusic(guideMusic.submenuLevel);
     }
 
     private void CreateListPlayer()
@@ -279,6 +288,7 @@ public class MenuController : MonoBehaviour
                 tempPlayer.transform.GetChild(3).gameObject.SetActive(true);
             tempPlayer.transform.GetChild(4).gameObject.GetComponent<Text>().text = score.ToString();
             tempPlayer.transform.GetChild(5).GetComponent<Button>().onClick.AddListener(delegate { OnClickDetail(id); });
+            tempPlayer.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { grafikControl.Make_Grafik(id); });
             tempPlayer.transform.SetParent(contentLeader.transform, false);
             tempPlayer.name = i.ToString() + " DetailLeader";
             tempPlayer.SetActive(true);
@@ -301,7 +311,6 @@ public class MenuController : MonoBehaviour
 
     private void OnClickDetail(int id)
     {
-
         ButtonClick();
         detailBoard.SetActive(true);
         leaderBoardList.SetActive(false);
@@ -341,7 +350,8 @@ public class MenuController : MonoBehaviour
             tempRecord.transform.GetChild(0).gameObject.GetComponent<Text>().text = idRecord;
             tempRecord.transform.GetChild(1).gameObject.GetComponent<Text>().text = gameType;
             tempRecord.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { OnClickInfoDetail(idRecord); });
-            tempRecord.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(delegate { OnClickDeleteRecord(idRecord, idP); });
+            tempRecord.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(delegate { simplepdf.Make_pdf(id, idRecord); });
+            tempRecord.transform.GetChild(8).GetComponent<Button>().onClick.AddListener(delegate { OnClickDeleteRecord(idRecord, idP); });
             tempRecord.transform.SetParent(contentDetail.transform, false);
             tempRecord.name = i.ToString() + " DetailLeader";
             tempRecord.SetActive(true);
@@ -573,6 +583,7 @@ public class MenuController : MonoBehaviour
         PlayerPrefs.SetString("nama", nameText.text);
         PlayerPrefs.SetString("gender", gender);
         SceneManager.LoadScene("SubMenuGame");
+        guideMusic.playGuideMusic(guideMusic.submenuLevel);
     }
 
     public void ToPlay()
@@ -691,5 +702,5 @@ public class MenuController : MonoBehaviour
             buttonSoundEffect.GetComponent<AudioSource>().Play();
         }
     }
-
+    
 }

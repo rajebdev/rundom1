@@ -8,10 +8,12 @@ public class ButtonController : MonoBehaviour
 
     // Sound Effect Object
     public GameObject buttonSoundEffect;
+    private GuideMusicController guideMusic;
 
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
     }
 
     // Update is called once per frame
@@ -24,12 +26,14 @@ public class ButtonController : MonoBehaviour
     {
         ButtonClick();
         SceneManager.LoadScene("Menu");
+        guideMusic.playGuideMusic(guideMusic.tekanPlay);
     }
 
     public void ToSubMenu()
     {
         ButtonClick();
         SceneManager.LoadScene("SubMenuGame");
+        guideMusic.playGuideMusic(guideMusic.submenuLevel);
     }
     
     public void ToEasyGame()

@@ -15,13 +15,18 @@ public class DeathMenuController : MonoBehaviour
 
     private bool isShowned = false;
     private float transition = 0.0f;
+    private bool dataSaved;
 
     // Sound Effect Object
     public GameObject buttonSoundEffect;
 
+    // guide music
+    private GuideMusicController guideMusic;
+
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
         gameObject.SetActive(false);
     }
 
@@ -29,7 +34,6 @@ public class DeathMenuController : MonoBehaviour
     void Update()
     {
         if (!isShowned) return;
-
         transition += Time.deltaTime;
         backgoundImg.color = Color.Lerp(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0.5f), transition);
     }
@@ -37,13 +41,10 @@ public class DeathMenuController : MonoBehaviour
     public void ToggleEndMenu(float score)
     {
         ButtonClick();
-        try
+        if (!dataSaved)
         {
             SaveScoreToDatabase();
-        }
-        catch (SqliteException)
-        {
-            Debug.Log("Data Succes Masuk");
+            dataSaved = true;
         }
         gameObject.SetActive(true);
         scoreText.text = ((int)score).ToString();
@@ -60,7 +61,8 @@ public class DeathMenuController : MonoBehaviour
     {
         ButtonClick();
         SceneManager.LoadScene("Menu");
-        
+        KinectManager.Instance.OnApplicationQuit();
+        guideMusic.playGuideMusic(guideMusic.tekanPlay);
         // Playing background menu music
         GameObject soundObject = GameObject.Find("BackgroundSoundMenu");
         if (soundObject != null && PlayerPrefs.GetString("BGM") == "ON")

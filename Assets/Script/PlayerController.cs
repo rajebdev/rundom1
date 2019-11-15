@@ -58,9 +58,14 @@ public class PlayerController : MonoBehaviour
     public int coundown = 3;
     private int count = 3;
 
+    // guide music
+    private GuideMusicController guideMusic;
+
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
+        guideMusic.playGuideMusic(guideMusic.bersiap);
         character = GetComponent<CharacterController>();
         StartCoroutine(TimeRun());
         Time.timeScale = 1;
@@ -98,9 +103,10 @@ public class PlayerController : MonoBehaviour
                     PlayerPrefs.SetFloat("xBahuKanan", getPosX(BahuKanan, 1));
                     PlayerPrefs.SetFloat("xBahuKiri", getPosX(BahuKiri, 1));
                 }
-
+                
                 if (count > 0)
                 {
+                    guideMusic.playGuideMusic(guideMusic.go);
                     countScreen.SetActive(true);
                     countText.text = count.ToString();
                     return;
@@ -149,6 +155,7 @@ public class PlayerController : MonoBehaviour
 
         if (count > 0)
         {
+            guideMusic.playGuideMusic(guideMusic.go);
             countScreen.SetActive(true);
             countText.text = count.ToString();
             return;

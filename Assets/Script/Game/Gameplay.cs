@@ -15,7 +15,7 @@ public class Gameplay : MonoBehaviour
     public Image questionImg;
     public GameObject[] choicesBox;
     public GameObject[] choicesImg;
-
+    
     public Sprite[] shapes;
 
     public int questionId;
@@ -73,9 +73,16 @@ public class Gameplay : MonoBehaviour
 
     public GameObject gameEndText;
 
+    // guide music
+    private GuideMusicController guideMusic;
+
+    private bool pilihBentukIsPlay = false;
+    private bool bentukIsPlay;
+
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
         quesList = new int[banyakSoal];
         answerList = new int[banyakSoal];
         shapeChoice1List = new int[banyakSoal];
@@ -91,7 +98,7 @@ public class Gameplay : MonoBehaviour
             rend.material.color = Color.green;
         else
             rend.material.color = Color.red;
-        if (PlayerPrefs.GetString("gametype") == "EASY")
+        if (PlayerPrefs.GetString("gametype") == "MEDIUM")
         {
             for (int i = 0; i < banyakSoal; i++)
             {
@@ -205,10 +212,11 @@ public class Gameplay : MonoBehaviour
                     choicesImg[i].gameObject.SetActive(false);
                     choicesBox[i].gameObject.SetActive(false);
                 }
-
                 questionImg.gameObject.SetActive(false);
                 return;
             }
+            pilihBentukIsPlay = false;
+            bentukIsPlay = false;
         }
         
         if (questionId == banyakSoal)
@@ -222,6 +230,11 @@ public class Gameplay : MonoBehaviour
             return;
         }
 
+        if (!pilihBentukIsPlay)
+        {
+            guideMusic.playGuideMusic(guideMusic.pilihBentuk);
+        }
+
 
         if (questionId < banyakSoal && player.GetComponent<ScoreController>().GetQuestionSolved() != banyakSoal)
         {
@@ -230,8 +243,158 @@ public class Gameplay : MonoBehaviour
             questionImg.GetComponent<Image>().color = colorValues[quesColor[questionId]];
             choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().sprite = shapes[quesList[questionId]];
             choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().color = colorValues[quesColor[questionId]];
+
+            if (!pilihBentukIsPlay)
+            {
+                pilihBentukIsPlay = true;
+                guideMusic.playGuideMusic(guideMusic.pilihBentuk);
+            }
+
             if (PlayerPrefs.GetString("gametype") == "MEDIUM")
+            {
+
+                if (!bentukIsPlay && pilihBentukIsPlay && !guideMusic.suara.isPlaying)
+                {
+                    bentukIsPlay = true;
+                    if (quesList[questionId] == 0)
+                        guideMusic.playGuideMusic(guideMusic.Circle);
+                    else if (quesList[questionId] == 1)
+                        guideMusic.playGuideMusic(guideMusic.Hexagon);
+                    else if (quesList[questionId] == 2)
+                        guideMusic.playGuideMusic(guideMusic.Kite);
+                    else if (quesList[questionId] == 3)
+                        guideMusic.playGuideMusic(guideMusic.Oval);
+                    else if (quesList[questionId] == 4)
+                        guideMusic.playGuideMusic(guideMusic.Parrallelogram);
+                    else if (quesList[questionId] == 5)
+                        guideMusic.playGuideMusic(guideMusic.Pentagon);
+                    else if (quesList[questionId] == 6)
+                        guideMusic.playGuideMusic(guideMusic.Rectangle);
+                    else if (quesList[questionId] == 7)
+                        guideMusic.playGuideMusic(guideMusic.Rhombus);
+                    else if (quesList[questionId] == 8)
+                        guideMusic.playGuideMusic(guideMusic.Square);
+                    else if (quesList[questionId] == 9)
+                        guideMusic.playGuideMusic(guideMusic.Star);
+                    else if (quesList[questionId] == 10)
+                        guideMusic.playGuideMusic(guideMusic.Triangle);
+                }
+            }
+
+            else if (PlayerPrefs.GetString("gametype") == "EASY")
+            {
+
+                if (!bentukIsPlay && pilihBentukIsPlay && !guideMusic.suara.isPlaying)
+                {
+                    bentukIsPlay = true;
+                    if (quesColor[questionId] == 0)
+                    {
+                        if (quesList[questionId] == 0)
+                            guideMusic.playGuideMusic(guideMusic.redCircle);
+                        else if (quesList[questionId] == 1)
+                            guideMusic.playGuideMusic(guideMusic.redHexagon);
+                        else if (quesList[questionId] == 2)
+                            guideMusic.playGuideMusic(guideMusic.redKite);
+                        else if (quesList[questionId] == 3)
+                            guideMusic.playGuideMusic(guideMusic.redOval);
+                        else if (quesList[questionId] == 4)
+                            guideMusic.playGuideMusic(guideMusic.redParrallelogram);
+                        else if (quesList[questionId] == 5)
+                            guideMusic.playGuideMusic(guideMusic.redPentagon);
+                        else if (quesList[questionId] == 6)
+                            guideMusic.playGuideMusic(guideMusic.redRectangle);
+                        else if (quesList[questionId] == 7)
+                            guideMusic.playGuideMusic(guideMusic.redRhombus);
+                        else if (quesList[questionId] == 8)
+                            guideMusic.playGuideMusic(guideMusic.redSquare);
+                        else if (quesList[questionId] == 9)
+                            guideMusic.playGuideMusic(guideMusic.redStar);
+                        else if (quesList[questionId] == 10)
+                            guideMusic.playGuideMusic(guideMusic.redTriangle);
+                    }
+                    else if (quesColor[questionId] == 1)
+                    {
+                        if (quesList[questionId] == 0)
+                            guideMusic.playGuideMusic(guideMusic.greenCircle);
+                        else if (quesList[questionId] == 1)
+                            guideMusic.playGuideMusic(guideMusic.greenHexagon);
+                        else if (quesList[questionId] == 2)
+                            guideMusic.playGuideMusic(guideMusic.greenKite);
+                        else if (quesList[questionId] == 3)
+                            guideMusic.playGuideMusic(guideMusic.greenOval);
+                        else if (quesList[questionId] == 4)
+                            guideMusic.playGuideMusic(guideMusic.greenParrallelogram);
+                        else if (quesList[questionId] == 5)
+                            guideMusic.playGuideMusic(guideMusic.greenPentagon);
+                        else if (quesList[questionId] == 6)
+                            guideMusic.playGuideMusic(guideMusic.greenRectangle);
+                        else if (quesList[questionId] == 7)
+                            guideMusic.playGuideMusic(guideMusic.greenRhombus);
+                        else if (quesList[questionId] == 8)
+                            guideMusic.playGuideMusic(guideMusic.greenSquare);
+                        else if (quesList[questionId] == 9)
+                            guideMusic.playGuideMusic(guideMusic.greenStar);
+                        else if (quesList[questionId] == 10)
+                            guideMusic.playGuideMusic(guideMusic.greenTriangle);
+                    }
+                    else if (quesColor[questionId] == 2)
+                    {
+                        if (quesList[questionId] == 0)
+                            guideMusic.playGuideMusic(guideMusic.blueCircle);
+                        else if (quesList[questionId] == 1)
+                            guideMusic.playGuideMusic(guideMusic.blueHexagon);
+                        else if (quesList[questionId] == 2)
+                            guideMusic.playGuideMusic(guideMusic.blueKite);
+                        else if (quesList[questionId] == 3)
+                            guideMusic.playGuideMusic(guideMusic.blueOval);
+                        else if (quesList[questionId] == 4)
+                            guideMusic.playGuideMusic(guideMusic.blueParrallelogram);
+                        else if (quesList[questionId] == 5)
+                            guideMusic.playGuideMusic(guideMusic.bluePentagon);
+                        else if (quesList[questionId] == 6)
+                            guideMusic.playGuideMusic(guideMusic.blueRectangle);
+                        else if (quesList[questionId] == 7)
+                            guideMusic.playGuideMusic(guideMusic.blueRhombus);
+                        else if (quesList[questionId] == 8)
+                            guideMusic.playGuideMusic(guideMusic.blueSquare);
+                        else if (quesList[questionId] == 9)
+                            guideMusic.playGuideMusic(guideMusic.blueStar);
+                        else if (quesList[questionId] == 10)
+                            guideMusic.playGuideMusic(guideMusic.blueTriangle);
+                    }
+                    else if (quesColor[questionId] == 3)
+                    {
+                        if (quesList[questionId] == 0)
+                            guideMusic.playGuideMusic(guideMusic.yellowCircle);
+                        else if (quesList[questionId] == 1)
+                            guideMusic.playGuideMusic(guideMusic.yellowHexagon);
+                        else if (quesList[questionId] == 2)
+                            guideMusic.playGuideMusic(guideMusic.yellowKite);
+                        else if (quesList[questionId] == 3)
+                            guideMusic.playGuideMusic(guideMusic.yellowOval);
+                        else if (quesList[questionId] == 4)
+                            guideMusic.playGuideMusic(guideMusic.yellowParrallelogram);
+                        else if (quesList[questionId] == 5)
+                            guideMusic.playGuideMusic(guideMusic.yellowPentagon);
+                        else if (quesList[questionId] == 6)
+                            guideMusic.playGuideMusic(guideMusic.yellowRectangle);
+                        else if (quesList[questionId] == 7)
+                            guideMusic.playGuideMusic(guideMusic.yellowRhombus);
+                        else if (quesList[questionId] == 8)
+                            guideMusic.playGuideMusic(guideMusic.yellowSquare);
+                        else if (quesList[questionId] == 9)
+                            guideMusic.playGuideMusic(guideMusic.yellowStar);
+                        else if (quesList[questionId] == 10)
+                            guideMusic.playGuideMusic(guideMusic.yellowTriangle);
+                    }
+                }
+            }
+
+            if (PlayerPrefs.GetString("gametype") == "EASY")
+            {
+                namaBangunText.gameObject.SetActive(true);
                 namaBangunText.text = colors[quesColor[questionId]] + " " + namaBangun[quesList[questionId]];
+            }
             else
                 namaBangunText.text = "";
 
@@ -268,7 +431,7 @@ public class Gameplay : MonoBehaviour
         dbconn.Open();
         IDbCommand dbcmd = dbconn.CreateCommand();
         DateTime dateNow = DateTime.Now;
-        string idRecord = dateNow.Year.ToString() + dateNow.Month.ToString() + dateNow.Day.ToString() + dateNow.Hour.ToString() + dateNow.Minute.ToString() + dateNow.Second.ToString();
+        string idRecord = String.Format("{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}", dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour, dateNow.Minute, dateNow.Second);
         PlayerPrefs.SetString("idGameRecord", idRecord);
         string sqlQuery = string.Format("INSERT INTO GameRecord VALUES ({12}, '{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, '{13}', '{14}', '{15}', '{16}', '{17}')", idRecord, PlayerPrefs.GetString("gametype"), quesList[0], quesList[1], quesList[2], 0, 0, answerList[0], answerList[1], answerList[2], 0, 0, PlayerPrefs.GetInt("id"), colors[quesColor[0]], colors[quesColor[1]], colors[quesColor[2]], '0', '0');
 

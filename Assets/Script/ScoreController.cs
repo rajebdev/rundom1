@@ -56,9 +56,13 @@ public class ScoreController : MonoBehaviour
         "YELLOW"
     };
 
+    // guide music
+    private GuideMusicController guideMusic;
+
     // Start is called before the first frame update
     void Start()
     {
+        guideMusic = GameObject.Find("GuideMusic").GetComponent<GuideMusicController>();
         user = GetComponent<CharacterController>();
         startTime = Time.time;
     }
@@ -149,6 +153,7 @@ public class ScoreController : MonoBehaviour
                     GamePlay.GetComponent<Gameplay>().GantiSoal();
                     GamePlay.GetComponent<Gameplay>().timeHit = GetComponent<PlayerController>().secTime;
                     trueNotif.SetActive(true);
+                    guideMusic.playGuideMusic(guideMusic.jawabBenar);
                     answerCek = true;
                     questSolved += 1;
                     SaveTimeSolvedQuestion(id);
@@ -163,6 +168,7 @@ public class ScoreController : MonoBehaviour
                     hit.gameObject.SetActive(false);
                     timeHitFalse = GetComponent<PlayerController>().secTime;
                     falseNotif.SetActive(true);
+                    guideMusic.playGuideMusic(guideMusic.jawabSalah);
                     answerCek = false;
                 }
                 
