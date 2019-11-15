@@ -8,10 +8,25 @@ ModelImporter:
     second: Running
   externalObjects:
   - first:
-      type: UnityEngine:Material
+      type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: Ch46_body
-    second: {fileID: 2100000, guid: 2035dfd55a5a6574f805be0c927ca4ce, type: 2}
+      name: Ch46_1001_Diffuse
+    second: {fileID: 2800000, guid: 47d17b6453664cd4283361e9ba3ab108, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ch46_1001_Glossiness
+    second: {fileID: 2800000, guid: 0ab8e5a9d8aeb5f459b152c69e743f72, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ch46_1001_Normal
+    second: {fileID: 2800000, guid: 4fb35095c4e4a17489d85723c4cd0a99, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ch46_1001_Specular
+    second: {fileID: 2800000, guid: 2689dd877ac57414d8ca3969e7730b33, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

@@ -12,9 +12,10 @@ public class Gameplay : MonoBehaviour
 {
     public GameObject player;
 
+    public GameObject playerType1, playerType2;
+
     public Image questionImg;
     public GameObject[] choicesBox;
-    public GameObject[] choicesImg;
     
     public Sprite[] shapes;
 
@@ -95,9 +96,9 @@ public class Gameplay : MonoBehaviour
         Renderer rend = player.GetComponent<Renderer>();
 
         if (PlayerPrefs.GetString("gender") == "L")
-            rend.material.color = Color.green;
+            playerType1.SetActive(false);
         else
-            rend.material.color = Color.red;
+            playerType2.SetActive(false);
         if (PlayerPrefs.GetString("gametype") == "MEDIUM")
         {
             for (int i = 0; i < banyakSoal; i++)
@@ -109,7 +110,7 @@ public class Gameplay : MonoBehaviour
                 }
                 quesList[i] = shapeQ;
 
-                int answer = Random.Range(0, choicesImg.Length);
+                int answer = Random.Range(0, 3);
                 answerList[i] = answer;
 
                 int shape1 = GetShapeNum();
@@ -143,7 +144,7 @@ public class Gameplay : MonoBehaviour
                 quesList[i] = shapeQ;
                 quesColor[i] = colorQ;
 
-                int answer = Random.Range(0, choicesImg.Length);
+                int answer = Random.Range(0, 3);
                 answerList[i] = answer;
 
                 int shape1 = GetShapeNum();
@@ -201,7 +202,6 @@ public class Gameplay : MonoBehaviour
                 changeQuestion = false;
                 for (int i = 0; i < 3; i++)
                 {
-                    choicesImg[i].gameObject.SetActive(true);
                     choicesBox[i].gameObject.SetActive(true);
                 }
             }
@@ -209,7 +209,6 @@ public class Gameplay : MonoBehaviour
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    choicesImg[i].gameObject.SetActive(false);
                     choicesBox[i].gameObject.SetActive(false);
                 }
                 questionImg.gameObject.SetActive(false);
@@ -223,7 +222,6 @@ public class Gameplay : MonoBehaviour
         {
             for (int i = 0; i < 3; i++)
             {
-                choicesImg[i].gameObject.SetActive(false);
                 choicesBox[i].gameObject.SetActive(false);
             }
             player.GetComponent<ScoreController>().OnDeath();
@@ -241,8 +239,12 @@ public class Gameplay : MonoBehaviour
             questionImg.gameObject.SetActive(true);
             questionImg.GetComponent<Image>().sprite = shapes[quesList[questionId]];
             questionImg.GetComponent<Image>().color = colorValues[quesColor[questionId]];
-            choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().sprite = shapes[quesList[questionId]];
-            choicesImg[answerList[questionId]].GetComponent<SpriteRenderer>().color = colorValues[quesColor[questionId]];
+            for (int i = 0; i < choicesBox[answerList[questionId]].transform.childCount; i++)
+            {
+                choicesBox[answerList[questionId]].transform.GetChild(i).gameObject.SetActive(false);
+            }
+            choicesBox[answerList[questionId]].transform.GetChild(quesList[questionId]).gameObject.SetActive(true);
+            choicesBox[answerList[questionId]].transform.GetChild(quesList[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[quesColor[questionId]];
 
             if (!pilihBentukIsPlay)
             {
@@ -400,25 +402,40 @@ public class Gameplay : MonoBehaviour
 
             if (answerList[questionId] == 0)
             {
-                choicesImg[1].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice1List[questionId]];
-                choicesImg[2].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice2List[questionId]];
-                choicesImg[1].GetComponent<SpriteRenderer>().color = colorValues[shape1ColorList[questionId]];
-                choicesImg[2].GetComponent<SpriteRenderer>().color = colorValues[shape2ColorList[questionId]];
+                for (int i = 0; i < choicesBox[answerList[questionId]].transform.childCount; i++)
+                {
+                    choicesBox[1].transform.GetChild(i).gameObject.SetActive(false);
+                    choicesBox[2].transform.GetChild(i).gameObject.SetActive(false);
+                }
+                choicesBox[1].transform.GetChild(shapeChoice1List[questionId]).gameObject.SetActive(true);
+                choicesBox[1].transform.GetChild(shapeChoice1List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape1ColorList[questionId]];
+                choicesBox[2].transform.GetChild(shapeChoice2List[questionId]).gameObject.SetActive(true);
+                choicesBox[2].transform.GetChild(shapeChoice2List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape2ColorList[questionId]];
 
             }
             else if (answerList[questionId] == 1)
             {
-                choicesImg[0].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice1List[questionId]];
-                choicesImg[2].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice2List[questionId]];
-                choicesImg[0].GetComponent<SpriteRenderer>().color = colorValues[shape1ColorList[questionId]];
-                choicesImg[2].GetComponent<SpriteRenderer>().color = colorValues[shape2ColorList[questionId]];
+                for (int i = 0; i < choicesBox[answerList[questionId]].transform.childCount; i++)
+                {
+                    choicesBox[0].transform.GetChild(i).gameObject.SetActive(false);
+                    choicesBox[2].transform.GetChild(i).gameObject.SetActive(false);
+                }
+                choicesBox[0].transform.GetChild(shapeChoice1List[questionId]).gameObject.SetActive(true);
+                choicesBox[0].transform.GetChild(shapeChoice1List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape1ColorList[questionId]];
+                choicesBox[2].transform.GetChild(shapeChoice2List[questionId]).gameObject.SetActive(true);
+                choicesBox[2].transform.GetChild(shapeChoice2List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape2ColorList[questionId]];
             }
             else if (answerList[questionId] == 2)
             {
-                choicesImg[0].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice1List[questionId]];
-                choicesImg[1].GetComponent<SpriteRenderer>().sprite = shapes[shapeChoice2List[questionId]];
-                choicesImg[0].GetComponent<SpriteRenderer>().color = colorValues[shape1ColorList[questionId]];
-                choicesImg[1].GetComponent<SpriteRenderer>().color = colorValues[shape2ColorList[questionId]];
+                for (int i = 0; i < choicesBox[answerList[questionId]].transform.childCount; i++)
+                {
+                    choicesBox[1].transform.GetChild(i).gameObject.SetActive(false);
+                    choicesBox[0].transform.GetChild(i).gameObject.SetActive(false);
+                }
+                choicesBox[1].transform.GetChild(shapeChoice1List[questionId]).gameObject.SetActive(true);
+                choicesBox[1].transform.GetChild(shapeChoice1List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape1ColorList[questionId]];
+                choicesBox[0].transform.GetChild(shapeChoice2List[questionId]).gameObject.SetActive(true);
+                choicesBox[0].transform.GetChild(shapeChoice2List[questionId]).gameObject.GetComponent<Renderer>().material.color = colorValues[shape2ColorList[questionId]];
             }
         }
     }

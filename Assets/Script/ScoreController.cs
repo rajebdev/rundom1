@@ -164,7 +164,7 @@ public class ScoreController : MonoBehaviour
                     score -= 2.0f;
                     falsePoint++;
                     salahText.GetComponent<Text>().text = falsePoint.ToString();
-                    GamePlay.GetComponent<Gameplay>().choicesImg[int.Parse(hit.gameObject.name.Substring(8, 1)) - 1].gameObject.SetActive(false);
+                    //GamePlay.GetComponent<Gameplay>().choicesImg[int.Parse(hit.gameObject.name.Substring(8, 1)) - 1].gameObject.SetActive(false);
                     hit.gameObject.SetActive(false);
                     timeHitFalse = GetComponent<PlayerController>().secTime;
                     falseNotif.SetActive(true);
