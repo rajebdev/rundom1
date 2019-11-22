@@ -109,7 +109,7 @@ public class GrafikController : MonoBehaviour
         dbcon.Open();
         IDbCommand cmnd_read = dbcon.CreateCommand();
         IDataReader reader;
-        string query = "SELECT * FROM GameRecord r, GameDetail d WHERE r.idGameRecord=d.idGameRecord AND r.gametype='" + level +"' AND r.id=" + ID.ToString() + " GROUP BY r.idGameRecord LIMIT 5";
+        string query = "SELECT * FROM GameRecord r, GameDetail d WHERE r.idGameRecord=d.idGameRecord AND r.gametype='" + level +"' AND r.id=" + ID.ToString() + " GROUP BY r.idGameRecord";
         cmnd_read.CommandText = query;
         reader = cmnd_read.ExecuteReader();
         int no = 1;
